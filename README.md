@@ -1,6 +1,6 @@
 # Team Projects & POCs Repository
 
-Welcome to the **Team Projects & POCs** repository!
+Welcome to the **GroupPOCWorks** repository!
 
 This repository serves as a centralized hub for documenting and showcasing our Proof of Concept (POC) work, technical learnings, and various experiments. Here, you'll find code, documentation, and examples related to the projects we've been working on as a team.
 
