@@ -1,6 +1,6 @@
 ﻿using MyDemos;
 
-Console.WriteLine("Hello, World!");
+Console.WriteLine("Start");
 
 await ReaderWriterLockSlimDemo.Test();
 
