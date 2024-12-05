@@ -1,0 +1,6 @@
+@TicketSales.WebApi_HostAddress = http://localhost:5215
+
+GET {{TicketSales.WebApi_HostAddress}}/event/
+Accept: application/json
+
+###

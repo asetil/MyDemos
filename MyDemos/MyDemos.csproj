@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Folder Include="CSharpFeatures\" />
+    <!--<PackageReference Include="SecretsAgent" Version="1.0.1" />-->
   </ItemGroup>
 
 </Project>
