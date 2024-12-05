@@ -4,9 +4,6 @@ using TicketSales.WebApi.Model.Dto;
 
 namespace TicketSales.WebApi.BusinessLogic.Services;
 
-public class EventService : BaseManager<EventEntity, EventItemDto>, IEventService
-{
-    public EventService(IServiceProvider serviceProvider) : base(serviceProvider)
-    {
-    }
-}
+public interface IEventService : IBaseManager<EventEntity, EventItemDto> { }
+
+public class EventService(IServiceProvider serviceProvider) : BaseManager<EventEntity, EventItemDto>(serviceProvider), IEventService { }
