@@ -1,0 +1,30 @@
+﻿@page "/"
+@using Blazor.Web.UI.HttpClientService
+@using static Blazor.Web.UI.HttpClientService.TestServis
+@inject TestServis testServis
+<PageTitle>Home</PageTitle>
+
+<h1>Servis Yorumları</h1>
+@if (yorumlar != null && yorumlar.Any())
+{
+    <ul>
+        @foreach (var yorum in yorumlar)
+        {
+            <li>
+                <strong>@yorum.Name</strong><br />
+                <em>@yorum.Email</em><br />
+                <p>@yorum.Body</p>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Comment> yorumlar = new List<Comment>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        yorumlar = await testServis.GetComment();
+        StateHasChanged();
+    }
+}
