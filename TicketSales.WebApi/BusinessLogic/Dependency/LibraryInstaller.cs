@@ -1,16 +1,25 @@
 ﻿using Aware.Dependency;
-using Aware.Data;
 using TicketSales.WebApi.Data;
-using TicketSales.WebApi.BusinessLogic.Services;
 
 namespace TicketSales.WebApi.BusinessLogic.Dependency;
 
 public class LibraryInstaller : AwareDependencyInstaller
 {
-    public override void Install(IServiceCollection services, bool isLite)
+    /// <summary>
+    /// //Add Aware functionality here
+    /// !!! Aware does not aim to control or hide coding logic in the background or limit you with its rules.
+    /// !!! Its purpose is to accelerate the project development process by providing a foundation for the most critical stages
+    /// !!! and equipping you with the necessary software tools and functionalities.
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="dependencySetting"></param>
+    /// <param name="configuration"></param>
+    public void Arrange(IServiceCollection services, DependencySetting dependencySetting, IConfiguration configuration)
     {
-        services.AddSingleton(typeof(IDbContextFactory), typeof(DbContextFactory<TicketSalesDbContext>));
-        base.InstallWithEF<TicketSalesDbContext>(services, isLite);
-        services.AddSingleton<IEventService, EventService>();
+
+        base.Install(services, dependencySetting);
+        base.InstallEntityFramework<TicketSalesDbContext>(services);
+
+        AddJwtAuthentication(services, configuration);
     }
 }

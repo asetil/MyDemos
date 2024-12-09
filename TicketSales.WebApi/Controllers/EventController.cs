@@ -1,47 +1,57 @@
 using Aware.BL.Model;
-using Aware.Search;
-using Aware.Util.Constants;
+using Aware.Util.Web;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketSales.WebApi.BusinessLogic.Services;
 using TicketSales.WebApi.Model.Dto;
+using Worchart.Search;
 
-namespace TicketSales.WebApi.Controllers
+namespace TicketSales.WebApi.Controllers;
+
+/// <summary>
+/// Check event controller methods on swagger
+/// </summary>
+/// <param name="eventService"></param>
+/// <param name="eventPlaceService"></param>
+public class EventController(IEventService eventService, IEventPlaceService eventPlaceService) : AwareAuthorizedController<EventItemDto>(eventService)
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class EventController : ControllerBase
+
+    [HttpGet("places/{eventId}")]
+    public List<PlaceItemDto> GetEventPlaces(long eventId)
     {
-        private readonly IEventService _eventService;
-        public EventController(IEventService eventService)
+        var result = new List<PlaceItemDto>();
+
+        //If you use Aware entities then you can access to current user information
+        var userId = CurrentUserId;
+        if (userId == 0)
         {
-            _eventService = eventService;
+            var searchResult = eventPlaceService.SearchBy(p => p.EventId == eventId, page: 1, pageSize: 100);
+            if (searchResult.HasResult)
+                result = searchResult.Results.Select(s => s.Place).ToList();
+        }
+        else
+        {
+            var searchParams = new EventPlaceSearchParams()
+            {
+                EventId = eventId,
+                UserId = userId,
+            };
+
+            searchParams.WithCount();
+            searchParams.SetPaging(1, 1);
+
+            var searchResult = eventPlaceService.Search(searchParams);
+            if (searchResult.HasResult)
+                result = searchResult.Results.Select(s => s.Place).ToList();
         }
 
-        [HttpGet]
-        public SearchResult<EventItemDto> Get()
-        {
-            var result = _eventService.Search();
-            return result;
-        }
+        return result;
+    }
 
-        [HttpPost("save")]
-        public OperationResult<EventItemDto> Save(EventItemDto model)
-        {
-            if (model == null || !ModelState.IsValid)
-                return OperationResult<EventItemDto>.Error(ResultCodes.Error.OperationFailed, model);
-
-            var result = _eventService.Save(model);
-            return result;
-        }
-
-        [HttpPost("delete")]
-        public OperationResult<EventItemDto> Delete(long id)
-        {
-            if (id <= 0)
-                return OperationResult<EventItemDto>.Error(ResultCodes.Error.OperationFailed);
-
-            var result = _eventService.Delete(id);
-            return result;
-        }
+    [HttpGet("buy-ticket/{eventId}")]
+    [Authorize]
+    public OperationResult<bool> BuyTicket(long eventId)
+    {
+        return Success<bool>(true);
     }
 }
