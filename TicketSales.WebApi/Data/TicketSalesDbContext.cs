@@ -35,31 +35,16 @@ public class TicketSalesDbContext : AwareDbContext<TicketSalesDbContext>
 
 
         //Apply outer configuration
-        //modelBuilder.ApplyConfiguration(new CampaignConfigurations());
-
-        //modelBuilder.Entity<Order>().HasKey("Order_Id_Os"); //Primary key
-        //modelBuilder.Entity<Order>().HasKey(o => new { o.Order_ID, o.OwnerId }); //Composite primary key
-
-        //modelBuilder.Entity<OrderItem>().ToTable("tbl_OrderItems");
-        //modelBuilder.Entity<OrderItem>().HasKey(k => k.Order_Id);
+        //modelBuilder.ApplyConfiguration(new EventEntityConfigurations());
+        
         modelBuilder.Entity<EventEntity>().Property(p => p.Name).IsRequired().HasMaxLength(500);
         modelBuilder.Entity<PlaceEntity>().Property(p => p.Name).IsRequired().HasMaxLength(500);
         modelBuilder.Entity<EventPlaceEntity>().Property(p => p.StartDate).IsRequired();
         modelBuilder.Entity<EventPlaceEntity>().Property(p => p.EndDate).IsRequired();
         modelBuilder.Entity<EventPerformerEntity>().Property(p => p.Name).IsRequired().HasMaxLength(200);
-
-        //modelBuilder.Entity<HutbeKonuEntity>().Property(p => p.Konu).IsRequired().HasMaxLength(300);
-        //modelBuilder.Entity<HutbeKonuEntity>().HasMany(p => p.HutbeList).WithOne(p => p.HutbeKonu).HasForeignKey(p => p.HutbeKonuId);
-
-        ////modelBuilder.Entity<OrderItem>().Property(p => p.UnitPrice).HasColumnName("Unit_Price");
-        ////modelBuilder.Entity<OrderItem>().Ignore(p => p.Price); //NotMapped
-
-        //modelBuilder.Entity<HutbeKonuHutbeEntity>().HasOne(p => p.Hutbe).WithMany().HasForeignKey(p => p.HutbeId);
-        //modelBuilder.Entity<HutbeKonuHutbeEntity>().HasOne(p => p.HutbeKonu).WithMany(p=>p.HutbeList).HasForeignKey(p => p.HutbeKonuId);
     }
 
     public void Dispose()
     {
-
     }
 }
