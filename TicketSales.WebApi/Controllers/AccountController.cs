@@ -10,7 +10,7 @@ using TicketSales.WebApi.Model.Dto;
 
 namespace TicketSales.WebApi.Controllers;
 
-public class AccountController(IUserManager userManager) : AwareEmptyController<UserItemDto>(userManager)
+public class AccountController(IUserManager userManager) : AwareEmptyController
 {
     [HttpPost("login")]
     [AllowAnonymous]

@@ -16,10 +16,12 @@ public class LibraryInstaller : AwareDependencyInstaller
     /// <param name="configuration"></param>
     public void Arrange(IServiceCollection services, DependencySetting dependencySetting, IConfiguration configuration)
     {
+        Install(services, dependencySetting)
+            .WithMenuManagement(services, dependencySetting.ServiceLifetime)
+            .WithSliderManagement(services, dependencySetting.ServiceLifetime)
+            .WithEntityFramework<TicketSalesDbContext>(services)
+            .WithJwtAuthentication(services, configuration);
 
-        base.Install(services, dependencySetting);
-        base.InstallEntityFramework<TicketSalesDbContext>(services);
-
-        AddJwtAuthentication(services, configuration);
+        services.AddAuthorization();
     }
 }
