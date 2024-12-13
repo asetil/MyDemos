@@ -1,4 +1,5 @@
 ﻿using Aware.Data.Entity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TicketSales.WebApi.Data.Entity
 {
@@ -6,8 +7,13 @@ namespace TicketSales.WebApi.Data.Entity
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Organizer { get; set; }
+
+        [ForeignKey("Organizer")]
+        public long? OrganizerId { get; set; }
         public string Tags { get; set; } //Animasyon|Bilim Kurgu|Aile
         public int Type { get; set; } //EventType enum
+
+        //Ref
+        public virtual EventOrganizerEntity Organizer { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 using Aware.Manager;
+using Aware.Search;
 using Aware.Util;
 using Aware.Util.Constants;
 using Microsoft.AspNetCore.Mvc;
@@ -21,5 +22,15 @@ public class HomeController(IMenuItemManager menuItemManager, ISliderItemManager
     public List<SliderItemDto> GetHomeSlider()
     {
         return sliderItemManager.GetByType((int)SliderType.Home);
+    }
+
+    [HttpGet("demo")]
+    public List<MenuItemDto> Demo()
+    {
+        var searchParams=new SearchParams<MenuItemDto>();
+        searchParams.SortBy(s => s.Title, true);
+        searchParams.SortBy(s => s.Order);
+
+        return menuItemManager.Search(searchParams).Results;
     }
 }

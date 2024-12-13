@@ -1,7 +1,6 @@
 ﻿using Aware.Data;
 using Microsoft.EntityFrameworkCore;
 using TicketSales.WebApi.Data.Entity;
-using TicketSales.WebApi.Migrations;
 
 namespace TicketSales.WebApi.Data;
 
@@ -16,6 +15,7 @@ public class TicketSalesDbContext : AwareDbContext<TicketSalesDbContext>
     public DbSet<EventPlaceEntity> EventPlace { get; set; }
     public DbSet<EventPerformerEntity> EventPerformer { get; set; }
     public DbSet<EventEvaluationEntity> EventEvaluation { get; set; }
+    public DbSet<EventOrganizerEntity> EventOrganizer { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -38,10 +38,15 @@ public class TicketSalesDbContext : AwareDbContext<TicketSalesDbContext>
         //modelBuilder.ApplyConfiguration(new EventEntityConfigurations());
         
         modelBuilder.Entity<EventEntity>().Property(p => p.Name).IsRequired().HasMaxLength(500);
+        modelBuilder.Entity<EventEntity>().HasOne(p => p.Organizer).WithMany().HasForeignKey(p => p.OrganizerId);
+
         modelBuilder.Entity<PlaceEntity>().Property(p => p.Name).IsRequired().HasMaxLength(500);
         modelBuilder.Entity<EventPlaceEntity>().Property(p => p.StartDate).IsRequired();
         modelBuilder.Entity<EventPlaceEntity>().Property(p => p.EndDate).IsRequired();
         modelBuilder.Entity<EventPerformerEntity>().Property(p => p.Name).IsRequired().HasMaxLength(200);
+
+        modelBuilder.Entity<EventOrganizerEntity>().Property(p => p.Name).IsRequired().HasMaxLength(200);
+        modelBuilder.Entity<EventOrganizerEntity>().HasMany(p=>p.Events).WithOne(o=>o.Organizer).HasForeignKey(o=>o.OrganizerId);
     }
 
     public void Dispose()
