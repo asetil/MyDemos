@@ -25,7 +25,9 @@ The **POCs** directory contains various Proof of Concept projects. These project
 
 **Directory Structure:**
 - `POCs/`
-  - `Project1/` - Description of Project1
+  - `TicketSales Web API/`
+  - ![TicketSalesWebAPI](https://github.com/user-attachments/assets/0c6b49c7-33bd-4845-ab21-e19821073d26)
+
   - `Project2/` - Description of Project2
   - ...
 
