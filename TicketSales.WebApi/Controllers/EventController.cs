@@ -1,4 +1,4 @@
-using Aware.BL.Model;
+using Aware.Model;
 using Aware.Util.Web;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +13,7 @@ namespace TicketSales.WebApi.Controllers;
 /// </summary>
 /// <param name="eventService"></param>
 /// <param name="eventPlaceService"></param>
-public class EventController(IEventService eventService, IEventPlaceService eventPlaceService) : AwareAuthorizedController<EventItemDto>(eventService)
+public class EventController(IEventService eventService, IEventPlaceService eventPlaceService) : AwareAuthorizedSearchController<EventItemDto, EventSearchParams>(eventService)
 {
 
     [HttpGet("places/{eventId}")]

@@ -6,6 +6,7 @@ using Aware.Dependency;
 using Aware.Util.Enum;
 using Aware.Auth;
 using Microsoft.OpenApi.Models;
+using TicketSales.WebApi.BusinessLogic.Util;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,10 @@ builder.Services.AddSwaggerGen(c =>
         Title = "Ticket Sales Web API",
         Version = "v1"
     });
+
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
@@ -58,6 +63,9 @@ builder.Services.AddDbContext<TicketSalesDbContext>(opt => opt.UseNpgsql(builder
                 .LogTo(Console.WriteLine, LogLevel.Information)); // Logs to console;
 
 var app = builder.Build();
+
+//Seed Data
+SeedData.Initialize(app.Services);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
