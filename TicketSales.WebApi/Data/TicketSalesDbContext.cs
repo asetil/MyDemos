@@ -48,8 +48,4 @@ public class TicketSalesDbContext : AwareDbContext<TicketSalesDbContext>
         modelBuilder.Entity<EventOrganizerEntity>().Property(p => p.Name).IsRequired().HasMaxLength(200);
         modelBuilder.Entity<EventOrganizerEntity>().HasMany(p=>p.Events).WithOne(o=>o.Organizer).HasForeignKey(o=>o.OrganizerId);
     }
-
-    public void Dispose()
-    {
-    }
 }
