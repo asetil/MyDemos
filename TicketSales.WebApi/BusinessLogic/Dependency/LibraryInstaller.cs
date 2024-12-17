@@ -1,4 +1,5 @@
 ﻿using Aware.Dependency;
+using System.Reflection;
 using TicketSales.WebApi.Data;
 
 namespace TicketSales.WebApi.BusinessLogic.Dependency;
@@ -12,13 +13,13 @@ public class LibraryInstaller : AwareDependencyInstaller
     /// !!! and equipping you with the necessary software tools and functionalities.
     /// </summary>
     /// <param name="services"></param>
-    /// <param name="dependencySetting"></param>
     /// <param name="configuration"></param>
-    public void Arrange(IServiceCollection services, DependencySetting dependencySetting, IConfiguration configuration)
+    /// <param name="callerAssembly"></param>
+    public void Arrange(IServiceCollection services, IConfiguration configuration, Assembly callerAssembly)
     {
-        Install(services, dependencySetting)
-            .WithMenuManagement(services, dependencySetting.ServiceLifetime)
-            .WithSliderManagement(services, dependencySetting.ServiceLifetime)
+        Install(services, configuration, callerAssembly)
+            .WithMenuManagement(services, Settings.ServiceLifetime)
+            .WithSliderManagement(services, Settings.ServiceLifetime)
             .WithEntityFramework<TicketSalesDbContext>(services)
             .WithJwtAuthentication(services, configuration);
 

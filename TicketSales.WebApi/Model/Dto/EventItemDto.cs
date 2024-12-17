@@ -9,6 +9,6 @@ namespace TicketSales.WebApi.Model.Dto
         public int Type { get; set; }
         public long? OrganizerId { get; set; }
         public string Tags { get; set; } //Animasyon|Bilim Kurgu|Aile
-        public EventOrganizerItemDto Organizer { get; set; }
+        public EventOrganizerItemDto? Organizer { get; set; }
     }
 }

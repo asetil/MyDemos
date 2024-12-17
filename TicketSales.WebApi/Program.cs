@@ -2,8 +2,6 @@ using TicketSales.WebApi.BusinessLogic.Dependency;
 using Microsoft.EntityFrameworkCore;
 using TicketSales.WebApi.Data;
 using System.Reflection;
-using Aware.Dependency;
-using Aware.Util.Enum;
 using Aware.Auth;
 using Microsoft.OpenApi.Models;
 using TicketSales.WebApi.BusinessLogic.Util;
@@ -49,14 +47,9 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-//Check Arrange method
+//Configure Aware Functionality, check arrange method
 var libraryInstaller = new LibraryInstaller();
-libraryInstaller.Arrange(builder.Services, new DependencySetting()
-{
-    Assembly = Assembly.GetExecutingAssembly(),
-    CacherType = CacherType.MemoryCache,
-    UseAwareEntities = true,
-}, builder.Configuration);
+libraryInstaller.Arrange(builder.Services, builder.Configuration, Assembly.GetExecutingAssembly());
 
 builder.Services.AddDbContext<TicketSalesDbContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("TicketSales.WebApi"))
                 .EnableSensitiveDataLogging() // Optional
