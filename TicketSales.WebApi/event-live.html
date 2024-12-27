@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Real-Time Event View</title>
+</head>
+
+<body>
+    <h1>Real-Time Event Data</h1>
+    <button type="button" id="btnBackendEvent">Publish From Backend</button>
+    <button id="btnFrontendEvent">Publish From Hub</button>
+    <div id="eventdata"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/eventHub")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        connection.onclose(async (error) => {
+            console.error("Connection interrupted:", error);
+            await start();
+        });
+
+        async function start() {
+            try {
+                await connection.start()
+                    .then(() => { console.log("Connected to SignalR Hub"); })
+                    .catch(err => console.error("Error connecting to SignalR Hub:", err));
+
+                connection.on("ReceiveEventUpdate", (eventData) => {
+                    console.log("SignalR event received.", eventData);
+                    const el = document.getElementById("event_" + eventData.id) || createEventElement(eventData);
+                    el.innerText = `${eventData.name}`;
+                });
+
+                function createEventElement(eventData) {
+                    const element = document.createElement("div");
+                    element.id = "event_" + eventData.id;
+                    document.getElementById("eventdata").appendChild(element);
+                    return element;
+                }
+            } catch (err) {
+                console.error("Connection error:", err);
+                setTimeout(start, 5000);
+            }
+        }
+        start();
+
+        document.getElementById("btnBackendEvent").addEventListener("click", async function () {
+            const apiUrl = "/event/publish";
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json(); // Parse the JSON response
+                console.log("Event Published", data)
+            } catch (error) {
+                console.log("Event Publish Failed!", error)
+            }
+        });
+
+        document.getElementById("btnFrontendEvent").addEventListener("click", () => {
+            let id = getRandomInt(100, 999);
+            const eventDto = {
+                id: id,
+                name: "Hub Call Event " + id,
+                description: "This is a sample event"
+            };
+             
+            connection.invoke("SendEventUpdate", eventDto)
+                .then(() => console.log("Event update sent"))
+                .catch(err => console.error("Error sending event update:", err));
+        });
+
+        function getRandomInt(min, max) {
+            min = Math.ceil(min); // Round up the lower bound
+            max = Math.floor(max); // Round down the upper bound
+            return Math.floor(Math.random() * (max - min)) + min; // Generate random number
+        }
+    </script>
+</body>
+</html>

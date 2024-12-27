@@ -54,4 +54,24 @@ public class EventController(IEventService eventService, IEventPlaceService even
     {
         return Success<bool>(true);
     }
+
+    [HttpGet("event-live")]
+    public ContentResult EventLive()
+    {
+        var html = System.IO.File.ReadAllText(@"./event-live.html");
+        return base.Content(html, "text/html");
+    }
+
+    [HttpGet("publish")]
+    public ActionResult PublishEvent()
+    {
+        var id = new Random().Next(1000, 99999);
+        eventService.PublishEvent(new EventItemDto()
+        {
+            Id = id,
+            Name = "My Test Event " + id
+        });
+
+        return new JsonResult(true);
+    }
 }

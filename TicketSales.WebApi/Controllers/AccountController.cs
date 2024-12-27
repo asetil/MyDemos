@@ -10,7 +10,7 @@ using TicketSales.WebApi.Model.Dto;
 
 namespace TicketSales.WebApi.Controllers;
 
-public class AccountController(IUserManager userManager, IAwareCacher cacher) : AwareEmptyController
+public class AccountController(IUserManager userManager, IActivationDataManager activationDataManager, IAwareCacher cacher) : AwareEmptyController
 {
     [HttpPost("login")]
     [AllowAnonymous]
@@ -24,6 +24,18 @@ public class AccountController(IUserManager userManager, IAwareCacher cacher) : 
         return loginResult;
     }
 
+    [HttpPost("register")]
+    [Authorize]
+    public OperationResult<bool> Register([FromBody] UserItemDto model)
+    {
+        if (CurrentUserId > 0)
+            return Failed<bool>(ResultCodes.Error.Login.AlreadyLoggedIn);
+
+        var result = userManager.Register(model);
+
+        return result;
+    }
+
     [HttpPost("logout")]
     [Authorize]
     public OperationResult<bool> Logout()
@@ -32,6 +44,17 @@ public class AccountController(IUserManager userManager, IAwareCacher cacher) : 
             return userManager.Logout(CurrentUserId);
 
         return Failed<bool>(ResultCodes.Error.Login.LogoffFailed);
+    }
+
+    [HttpPost("activation")]
+    public OperationResult<ActivationDataItemDto> Activation([FromQuery] string code)
+    {
+        if (string.IsNullOrEmpty(code))
+            return Failed<ActivationDataItemDto>(ResultCodes.Error.ActivationData.InvalidActivationCode);
+
+        var result = activationDataManager.CheckCode(code);
+
+        return result;
     }
 
     [HttpGet("user-list")]
