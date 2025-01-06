@@ -4,3 +4,21 @@ docker run -d --name redis-cache -p 6379:6379 redis
 docker exec -it redis-cache redis-cli ping
 --To persist Redis data across container restarts, modify the Docker command to use a volume:
 docker run -d --name redis-cache -p 6379:6379 -v redis-data:/data redis
+
+
+//REQUIREMENTS
+Based on medium article : https://medium.com/@manishs-kth/systems-design-interview-design-a-ticket-master-d6ec76f51cab :)
+- Tickets should be searchable by cities, stadiums, games, teams, and by time.
+- The ticket should remains blocked before the transaction is completed.
+- Tickets get available again in the portal if the user does not complete the transaction or it fails.
+- On successful booking, an email and SMS with a QR code are sent to the user.
+- Tickets are available 2 days before the game schedule.
+- Tickets get sold within an hour if the playing teams are famous.
+- 1 million page visitors for a famous game within an hour of the ticket release.
+- Highly concurrent systems.
+- Highly available.
+- Low latency ( < 500ms)
+- Eventual consistency.
+- Highly secure for transactions
+- Simultaneously multiple users try to book the same seat.
+- While a user was completing the payment it failed and other user booked the same seat, example of bad customer experience.
