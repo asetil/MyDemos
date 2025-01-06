@@ -1,11 +1,11 @@
 using Aware.Manager;
+using Aware.Model.Dto;
 using Aware.Search;
 using Aware.Util;
 using Aware.Util.Constants;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using TicketSales.WebApi.BusinessLogic.Util;
-using TicketSales.WebApi.Model.Dto;
 
 namespace TicketSales.WebApi.Controllers;
 

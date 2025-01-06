@@ -2,16 +2,8 @@
 
 Console.WriteLine("Start");
 
-public enum Namso
-{
-    abc=1
-}
-
-public class Osman
-{
-    private const Namso xyz = Namso.abc;
-}
-
+var wordToPdf = new WordToPdfConvertor();
+wordToPdf.Convert("abc.docx", "abc.pdf");
 
 //Load test on AES encryption
 //int numberOfRequests = 1000000;

@@ -1,4 +1,4 @@
-﻿using Aware.Model;
+﻿using Aware.Model.Dto;
 using TicketSales.WebApi.Data.Entity;
 
 namespace TicketSales.WebApi.Model.Dto

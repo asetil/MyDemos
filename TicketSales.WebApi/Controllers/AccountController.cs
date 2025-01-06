@@ -1,16 +1,17 @@
 ﻿using Aware.Auth;
 using Aware.Model;
+using Aware.Model.Dto;
 using Aware.Search;
 using Aware.Util;
-using Aware.Util.Cache;
 using Aware.Util.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using TicketSales.WebApi.Model.Dto;
 
 namespace TicketSales.WebApi.Controllers;
 
-public class AccountController(IUserManager userManager, IActivationDataManager activationDataManager, IAwareCacher cacher) : AwareEmptyController
+public class AccountController(IUserManager userManager, IActivationDataManager activationDataManager, IDistributedCache cacher) : AwareEmptyController
 {
     [HttpPost("login")]
     [AllowAnonymous]
@@ -79,7 +80,7 @@ public class AccountController(IUserManager userManager, IActivationDataManager 
         var loginResult = userManager.Login("admin@ticketsales.com", "admin");
         if (loginResult.Ok)
         {
-            cacher.Add("DEMO_SESSION_TOKEN", loginResult.Value.SessionToken, CommonConstants.HourlyCacheTime);
+            cacher.AddToCache("DEMO_SESSION_TOKEN", loginResult.Value.SessionToken, CommonConstants.HourlyCacheTime);
         }
 
         return loginResult;

@@ -1,9 +1,6 @@
-﻿using Aware.Data;
-using Aware.Manager;
-using Aware.Search;
+﻿using Aware.Manager;
+using Aware.Util;
 using Aware.Util.Constants;
-using Microsoft.EntityFrameworkCore;
-using System;
 using TicketSales.WebApi.Data.Entity;
 using TicketSales.WebApi.Model.Dto;
 
@@ -18,7 +15,7 @@ public class EventOrganizerService(IServiceProvider serviceProvider) : BaseManag
 {
     public List<EventOrganizerItemDto> GetTopList()
     {
-        var result = Cacher.Get<List<EventOrganizerItemDto>>(Util.TickesSalesCacheKeys.OrganizerTopList);
+        var result = Cacher.GetData<List<EventOrganizerItemDto>>(Util.TickesSalesCacheKeys.OrganizerTopList);
         if (result == null)
         {
             using var unitOfWork = GetUnitOfWork();
@@ -37,7 +34,7 @@ public class EventOrganizerService(IServiceProvider serviceProvider) : BaseManag
                 });
             }
 
-            Cacher.Add(Util.TickesSalesCacheKeys.OrganizerTopList, result, CommonConstants.HourlyCacheTime);
+            Cacher.AddToCache(Util.TickesSalesCacheKeys.OrganizerTopList, result, CommonConstants.HourlyCacheTime);
         }
 
         return result ?? new List<EventOrganizerItemDto>();

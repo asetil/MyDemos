@@ -1,0 +1,6 @@
+﻿-- To initalize Redis from docker
+docker run -d --name redis-cache -p 6379:6379 redis
+-- test it
+docker exec -it redis-cache redis-cli ping
+--To persist Redis data across container restarts, modify the Docker command to use a volume:
+docker run -d --name redis-cache -p 6379:6379 -v redis-data:/data redis

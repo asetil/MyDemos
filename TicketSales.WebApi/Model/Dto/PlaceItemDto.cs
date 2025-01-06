@@ -1,4 +1,4 @@
-﻿using Aware.Model;
+﻿using Aware.Model.Dto;
 
 namespace TicketSales.WebApi.Model.Dto
 {
@@ -9,6 +9,6 @@ namespace TicketSales.WebApi.Model.Dto
         public long CityId { get; set; } //TODO will develop
         public string Address { get; set; }
         public long? ParentId { get; set; }
-        public PlaceItemDto Parent { get; set; }
+        public PlaceItemDto? Parent { get; set; }
     }
 }
