@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TicketSales.WebApi.Data;
@@ -11,9 +12,11 @@ using TicketSales.WebApi.Data;
 namespace TicketSales.WebApi.Migrations
 {
     [DbContext(typeof(TicketSalesDbContext))]
-    partial class TicketSalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241228203615_eventsession2")]
+    partial class eventsession2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -608,58 +611,6 @@ namespace TicketSales.WebApi.Migrations
                     b.ToTable("EventSession");
                 });
 
-            modelBuilder.Entity("TicketSales.WebApi.Data.Entity.EventTicketEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<long>("EventSessionId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Gender")
-                        .HasColumnType("integer");
-
-                    b.Property<long>("HallSeatId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
-
-                    b.Property<DateTime>("PurchaseTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<long>("UserCreated")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("UserModified")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventSessionId");
-
-                    b.HasIndex("HallSeatId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("EventTicket");
-                });
-
             modelBuilder.Entity("TicketSales.WebApi.Data.Entity.PlaceEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -751,56 +702,6 @@ namespace TicketSales.WebApi.Migrations
                     b.ToTable("PlaceHall");
                 });
 
-            modelBuilder.Entity("TicketSales.WebApi.Data.Entity.PlaceHallSeatEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<int>("Block")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Column")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<long>("PlaceHallId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Row")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
-                    b.Property<long>("UserCreated")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("UserModified")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlaceHallId");
-
-                    b.ToTable("PlaceHallSeat");
-                });
-
             modelBuilder.Entity("Aware.Data.Entity.AwareTemplateEntity", b =>
                 {
                     b.HasOne("Aware.Data.Entity.AwareTemplateEntity", "Parent")
@@ -867,31 +768,6 @@ namespace TicketSales.WebApi.Migrations
                     b.Navigation("PlaceHall");
                 });
 
-            modelBuilder.Entity("TicketSales.WebApi.Data.Entity.EventTicketEntity", b =>
-                {
-                    b.HasOne("TicketSales.WebApi.Data.Entity.EventSessionEntity", "EventSession")
-                        .WithMany()
-                        .HasForeignKey("EventSessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TicketSales.WebApi.Data.Entity.PlaceHallSeatEntity", "HallSeat")
-                        .WithMany()
-                        .HasForeignKey("HallSeatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Aware.Data.Entity.UserEntity", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("EventSession");
-
-                    b.Navigation("HallSeat");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("TicketSales.WebApi.Data.Entity.PlaceEntity", b =>
                 {
                     b.HasOne("TicketSales.WebApi.Data.Entity.PlaceEntity", "Parent")
@@ -910,17 +786,6 @@ namespace TicketSales.WebApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Place");
-                });
-
-            modelBuilder.Entity("TicketSales.WebApi.Data.Entity.PlaceHallSeatEntity", b =>
-                {
-                    b.HasOne("TicketSales.WebApi.Data.Entity.PlaceHallEntity", "PlaceHall")
-                        .WithMany()
-                        .HasForeignKey("PlaceHallId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PlaceHall");
                 });
 
             modelBuilder.Entity("Aware.Data.Entity.MenuItemEntity", b =>

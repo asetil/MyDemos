@@ -10,7 +10,7 @@ namespace TicketSales.WebApi.Data.Entity
 
         [ForeignKey("Organizer")]
         public long? OrganizerId { get; set; }
-        public string Tags { get; set; } //Animasyon|Bilim Kurgu|Aile
+        public string Tags { get; set; } //Animation|Science & Fiction|Family
         public int Type { get; set; } //EventType enum
 
         //Ref

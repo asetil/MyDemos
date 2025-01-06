@@ -3,19 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TicketSales.WebApi.Data.Entity
 {
-    public class EventPlaceEntity : BaseEntity
+    public class PlaceHallEntity : BaseEntity
     {
-        [ForeignKey("Event")]
-        public long EventId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
 
         [ForeignKey("Place")]
         public long PlaceId { get; set; }
 
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-
         //Ref
-        public virtual EventEntity Event { get; set; }
         public virtual PlaceEntity Place { get; set; }
     }
 }

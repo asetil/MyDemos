@@ -1,16 +1,17 @@
 ﻿using Aware.Auth;
 using Aware.Model;
+using Aware.Model.Dto;
 using Aware.Search;
 using Aware.Util;
-using Aware.Util.Cache;
 using Aware.Util.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using TicketSales.WebApi.Model.Dto;
 
 namespace TicketSales.WebApi.Controllers;
 
-public class AccountController(IUserManager userManager, IAwareCacher cacher) : AwareEmptyController
+public class AccountController(IUserManager userManager, IActivationDataManager activationDataManager, IDistributedCache cacher) : AwareEmptyController
 {
     [HttpPost("login")]
     [AllowAnonymous]
@@ -24,6 +25,18 @@ public class AccountController(IUserManager userManager, IAwareCacher cacher) : 
         return loginResult;
     }
 
+    [HttpPost("register")]
+    [Authorize]
+    public OperationResult<bool> Register([FromBody] UserItemDto model)
+    {
+        if (CurrentUserId > 0)
+            return Failed<bool>(ResultCodes.Error.Login.AlreadyLoggedIn);
+
+        var result = userManager.Register(model);
+
+        return result;
+    }
+
     [HttpPost("logout")]
     [Authorize]
     public OperationResult<bool> Logout()
@@ -32,6 +45,17 @@ public class AccountController(IUserManager userManager, IAwareCacher cacher) : 
             return userManager.Logout(CurrentUserId);
 
         return Failed<bool>(ResultCodes.Error.Login.LogoffFailed);
+    }
+
+    [HttpPost("activation")]
+    public OperationResult<ActivationDataItemDto> Activation([FromQuery] string code)
+    {
+        if (string.IsNullOrEmpty(code))
+            return Failed<ActivationDataItemDto>(ResultCodes.Error.ActivationData.InvalidActivationCode);
+
+        var result = activationDataManager.CheckCode(code);
+
+        return result;
     }
 
     [HttpGet("user-list")]
@@ -56,7 +80,7 @@ public class AccountController(IUserManager userManager, IAwareCacher cacher) : 
         var loginResult = userManager.Login("admin@ticketsales.com", "admin");
         if (loginResult.Ok)
         {
-            cacher.Add("DEMO_SESSION_TOKEN", loginResult.Value.SessionToken, CommonConstants.HourlyCacheTime);
+            cacher.AddToCache("DEMO_SESSION_TOKEN", loginResult.Value.SessionToken, CommonConstants.HourlyCacheTime);
         }
 
         return loginResult;

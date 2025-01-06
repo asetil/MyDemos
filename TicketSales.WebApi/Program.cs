@@ -5,13 +5,14 @@ using System.Reflection;
 using Aware.Auth;
 using Microsoft.OpenApi.Models;
 using TicketSales.WebApi.BusinessLogic.Util;
+using TicketSales.WebApi.BusinessLogic.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddMemoryCache();
 builder.Services.AddOutputCache();
+builder.Services.AddSignalR();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -67,6 +68,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 
 app.UseMiddleware<AwareJwtMiddleware>();
@@ -74,5 +76,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.UseOutputCache();
+
+app.MapHub<EventHub>("/eventHub");
 
 app.Run();

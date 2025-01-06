@@ -1,33 +1,32 @@
 ﻿using Aware.Search;
 using TicketSales.WebApi.Model.Dto;
 
-namespace Worchart.Search
+namespace TicketSales.WebApi.BusinessLogic.SearchParams;
+
+public class EventSessionSearchParams : SearchParams<EventSessionItemDto>
 {
-    public class EventPlaceSearchParams : SearchParams<EventPlaceItemDto>
+    public long? EventId { get; set; }
+    public long? UserId { get; set; }
+    public DateTime? DateStart { get; set; }
+    public DateTime? DateEnd { get; set; }
+
+
+    public override ISearchParams<EventSessionItemDto> Prepare()
     {
-        public long? EventId { get; set; }
-        public long? UserId { get; set; }
-        public DateTime? DateStart { get; set; }
-        public DateTime? DateEnd { get; set; }
+        if (EventId.HasValue)
+            FilterBy(i => i.EventId == EventId.Value);
 
+        if (UserId.HasValue)
+            FilterBy(i => i.UserCreated == UserId.Value);
 
-        public override ISearchParams<EventPlaceItemDto> Prepare()
-        {
-            if (EventId.HasValue)
-                FilterBy(i => i.EventId == EventId.Value);
+        if (DateStart.HasValue)
+            FilterBy(i => i.StartTime >= DateStart.Value);
 
-            if (UserId.HasValue)
-                FilterBy(i => i.UserCreated == UserId.Value);
+        if (DateEnd.HasValue)
+            FilterBy(i => i.StartTime <= DateEnd.Value);
 
-            if (DateStart.HasValue)
-                FilterBy(i => i.StartDate >= DateStart.Value);
+        SortBy(o => o.StartTime, descending: true);
 
-            if (DateEnd.HasValue)
-                FilterBy(i => i.StartDate <= DateEnd.Value && i.EndDate <= DateEnd.Value);
-
-            SortBy(o => o.StartDate, descending: true);
-
-            return this;
-        }
+        return this;
     }
 }

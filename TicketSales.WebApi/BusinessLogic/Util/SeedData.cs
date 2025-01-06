@@ -1,5 +1,5 @@
 ﻿using Aware.Auth;
-using Aware.Model;
+using Aware.Model.Dto;
 
 namespace TicketSales.WebApi.BusinessLogic.Util;
 
